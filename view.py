@@ -30,13 +30,14 @@ class View:
             print('Incorrect datatype')
             return
         expense = Expense(value, name)
-        self.expenseController.insertExpense([(expense.value, expense.name, expense.date_entered)])
+        self.expenseController.insertExpense([(expense.value, expense.name, expense.date_entered, expense.day_of_the_week)])
 
     def getPurchases(self):
         string = "1. Daily\n2. Weekly\n3. Monthly\n4. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
-            print(self.expenseController.getDailyExpenses()) 
+            for days, total in self.expenseController.getDaysOfTheWeekExpenses().items():
+                print(days + ": £" + str(total / 100))
         elif switcher == 2:
             print(self.expenseController.getWeeklyExpenses()) 
         elif switcher == 3:

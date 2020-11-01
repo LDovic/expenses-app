@@ -9,6 +9,7 @@ class Expense:
         self.value = value
         self.name = name
         self.date_entered = time.strftime("%d, %m, %y")
+        self.day_of_the_week = time.localtime(time.time()).tm_wday
 
 class ExpenseController:
     def __init__(self):
@@ -16,6 +17,27 @@ class ExpenseController:
 
     def insertExpense(self, insert):
         self.db.insert(insert)
+
+    def getDaysOfTheWeekExpenses(self):
+        days_of_the_week = {"Monday": 0, "Tuesday": 0, "Wednesday": 0, "Thursday": 0, "Friday": 0, "Saturday": 0, "Sunday": 0}
+        for row in self.db.select_dotw():
+            day = int(row[1])
+            price = float('{0}'.format(row[0]))
+            if day == 0:
+                days_of_the_week["Monday"] += price
+            if day == 1:
+                days_of_the_week["Tuesday"] += price
+            if day == 2:
+                days_of_the_week["Wednesday"] += price 
+            if day == 3:
+                days_of_the_week["Thursday"] += price
+            if day == 4:
+                days_of_the_week["Friday"] += price
+            if day == 5:
+                days_of_the_week["Saturday"] += price
+            if day == 6:
+                days_of_the_week["Sunday"] += price
+        return days_of_the_week
 
     def getDailyExpenses(self):
         today = time.localtime(time.time()).tm_mday
