@@ -20,7 +20,7 @@ class Db:
         return self.cursor.fetchall()
 
     def select_dotw(self):
-        self.cursor.execute("SELECT price, day_of_the_week FROM expenses")
+        self.cursor.execute("SELECT price, date_entered, day_of_the_week FROM expenses")
         return self.cursor.fetchall()
 
     def insert(self, insert):

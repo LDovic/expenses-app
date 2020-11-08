@@ -33,7 +33,7 @@ class View:
         self.expenseController.insertExpense([(expense.value, expense.name, expense.date_entered, expense.day_of_the_week)])
 
     def getPurchases(self):
-        string = "1. Daily\n2. Weekly\n3. Monthly\n4. Quit\n"
+        string = "1. Daily\n2. Weekly\n3. Monthly\n4. Days of the week\n5. Average daily\n6. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
             for days, total in self.expenseController.getDaysOfTheWeekExpenses().items():
@@ -43,6 +43,10 @@ class View:
         elif switcher == 3:
             print(self.expenseController.getMonthlyExpenses()) 
         elif switcher == 4:
+            print(self.expenseController.getDaysOfTheWeekExpenses())
+        elif switcher == 5:
+            print(self.expenseController.getAverageDailySpend())
+        elif switcher == 6:
             return False
         else:
             switcher = switch(string)
