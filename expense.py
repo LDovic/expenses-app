@@ -40,7 +40,7 @@ class ExpenseController:
                 if day == 6:
                     days_of_the_week["Sunday"] += price
         for day, expenses in days_of_the_week.items():
-            print(day + ": ", "£" + str(expenses / 100)) 
+            return (expenses, day + ": ", "£" + str(expenses / 100)) 
 
     def getYesterdayExpenses(self):
         from datetime import date
@@ -51,7 +51,7 @@ class ExpenseController:
             price = float('{0}'.format(row[0]))
             if yesterday.day == date.day:
                 total += price
-        return "£" + str(total / 100) + " spent yesterday"
+        return (total, "£" + str(total / 100) + " spent yesterday")
 
     def getDailyExpenses(self):
         today = time.localtime(time.time()).tm_mday
@@ -61,7 +61,7 @@ class ExpenseController:
             price = float('{0}'.format(row[0]))
             if today == date.day:
                 total += price
-        return "£" + str(total / 100) + " spent today"
+        return (total, "£" + str(total / 100) + " spent today")
 
     def getWeeklyExpenses(self):
         this_week = datetime.today().date().isocalendar()[1]
@@ -71,7 +71,7 @@ class ExpenseController:
             price = float('{0}'.format(row[0]))
             if this_week == date.isocalendar()[1]:
                 total += price
-        return "£" + str(total / 100) + " spent this week"
+        return (total, "£" + str(total / 100) + " spent this week")
 
     def getMonthlyExpenses(self):
         this_month = datetime.today().date().month
@@ -81,7 +81,7 @@ class ExpenseController:
             price = float('{0}'.format(row[0]))
             if this_month == date.month:
                 total += price
-        return "£" + str(total / 100) + " spent this month"
+        return (total, "£" + str(total / 100) + " spent this month")
 
     def getAverageDailySpend(self):
         this_week = datetime.today().date().isocalendar()[1]
@@ -91,7 +91,7 @@ class ExpenseController:
             price = float('{0}'.format(row[0]))
             if this_week == date.isocalendar()[1]:
                 total += price
-        return "£" + str(total / 7 / 100) + " average daily spend"
+        return (total, "£" + str(total / 7 / 100) + " average daily spend")
 
     def getPurchaseHistory(self):
         return self.db.select_all()

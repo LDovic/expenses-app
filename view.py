@@ -3,11 +3,12 @@ import sqlite3
 from expense import *
 from sqlite3 import dbapi2
 from datetime import date
-
+from controller import Coloriser
 
 class View:
     def __init__(self):
         self.expenseController = ExpenseController()
+        self.coloriser = Coloriser()
 
     def switch(self, string):
         switcher = input(string)
@@ -36,8 +37,7 @@ class View:
         string = "1. Daily\n2. Weekly\n3. Monthly\n4. Days of the week\n5. Average daily\n6. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
-            for days, total in self.expenseController.getDaysOfTheWeekExpenses().items():
-                print(days + ": £" + str(total / 100))
+            self.coloriser(self.expenseController.getDailyExpenses()) 
         elif switcher == 2:
             print(self.expenseController.getWeeklyExpenses()) 
         elif switcher == 3:
@@ -58,10 +58,10 @@ class View:
     def app(self):
         print("Welcome to the expenses app")
         print("Today: " + str(date.today()))
-        print(self.expenseController.getYesterdayExpenses())
-        print(self.expenseController.getDailyExpenses())
-        print(self.expenseController.getWeeklyExpenses())
-        print(self.expenseController.getMonthlyExpenses())
+        self.coloriser.colorise(self.expenseController.getYesterdayExpenses())
+        self.coloriser.colorise(self.expenseController.getDailyExpenses())
+        self.coloriser.colorise(self.expenseController.getWeeklyExpenses())
+        self.coloriser.colorise(self.expenseController.getMonthlyExpenses())
         string = "1. Insert expense\n2. Total expenses\n3. Purchase history\n4. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
