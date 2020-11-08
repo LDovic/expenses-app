@@ -43,7 +43,7 @@ class View:
         elif switcher == 3:
             print(self.expenseController.getMonthlyExpenses()) 
         elif switcher == 4:
-            print(self.expenseController.getDaysOfTheWeekExpenses())
+            self.expenseController.getDaysOfTheWeekExpenses()
         elif switcher == 5:
             print(self.expenseController.getAverageDailySpend())
         elif switcher == 6:
@@ -58,6 +58,7 @@ class View:
     def app(self):
         print("Welcome to the expenses app")
         print("Today: " + str(date.today()))
+        print(self.expenseController.getYesterdayExpenses())
         print(self.expenseController.getDailyExpenses())
         print(self.expenseController.getWeeklyExpenses())
         print(self.expenseController.getMonthlyExpenses())

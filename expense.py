@@ -2,7 +2,6 @@ import time
 import sqlite3
 from database import *
 from sqlite3 import dbapi2
-from datetime import date
 
 class Expense:
     def __init__(self, value, name):
@@ -40,7 +39,19 @@ class ExpenseController:
                     days_of_the_week["Saturday"] += price
                 if day == 6:
                     days_of_the_week["Sunday"] += price
-        return days_of_the_week
+        for day, expenses in days_of_the_week.items():
+            print(day + ": ", "£" + str(expenses / 100)) 
+
+    def getYesterdayExpenses(self):
+        from datetime import date
+        yesterday = date.today() - timedelta(days=1)
+        total = 0
+        for row in self.db.select():
+            date = datetime.strptime(row[1], '%d, %m, %y').date()
+            price = float('{0}'.format(row[0]))
+            if yesterday == date.day:
+                total += price
+        return "£" + str(total / 100) + " spent yesterday"
 
     def getDailyExpenses(self):
         today = time.localtime(time.time()).tm_mday
