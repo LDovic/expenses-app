@@ -49,7 +49,7 @@ class ExpenseController:
         for row in self.db.select():
             date = datetime.strptime(row[1], '%d, %m, %y').date()
             price = float('{0}'.format(row[0]))
-            if yesterday == date.day:
+            if yesterday.day == date.day:
                 total += price
         return "£" + str(total / 100) + " spent yesterday"
 
