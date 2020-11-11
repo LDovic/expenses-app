@@ -39,8 +39,10 @@ class ExpenseController:
                     days_of_the_week["Saturday"] += price
                 if day == 6:
                     days_of_the_week["Sunday"] += price
+        print_array = []
         for day, expenses in days_of_the_week.items():
-            return (expenses, day + ": ", "£" + str(expenses / 100)) 
+            print_array.append([expenses, day + ": ", "£" + str(expenses / 100)]) 
+        return print_array
 
     def getYesterdayExpenses(self):
         from datetime import date
@@ -62,6 +64,19 @@ class ExpenseController:
             if today == date.day:
                 total += price
         return (total, "£" + str(total / 100) + " spent today")
+
+    def getLastWeekExpenses(self):
+        this_week = datetime.today().date().isocalendar()[1]
+        last_week = this_week - 1
+        if this_week <= 1:
+            last_week = 52
+        total = 0
+        for row in self.db.select():
+            date = datetime.strptime(row[1], '%d, %m, %y').date()
+            price = float('{0}'.format(row[0]))
+            if last_week == date.isocalendar()[1]:
+                total += price
+        return (total, "£" + str(total / 100) + " spent last week")
 
     def getWeeklyExpenses(self):
         this_week = datetime.today().date().isocalendar()[1]

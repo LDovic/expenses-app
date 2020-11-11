@@ -37,13 +37,14 @@ class View:
         string = "1. Daily\n2. Weekly\n3. Monthly\n4. Days of the week\n5. Average daily\n6. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
-            self.coloriser(self.expenseController.getDailyExpenses()) 
+            self.coloriser.colorise(self.expenseController.getDailyExpenses()) 
         elif switcher == 2:
             print(self.expenseController.getWeeklyExpenses()) 
         elif switcher == 3:
             print(self.expenseController.getMonthlyExpenses()) 
         elif switcher == 4:
-            self.expenseController.getDaysOfTheWeekExpenses()
+            for data in self.expenseController.getDaysOfTheWeekExpenses():
+                self.coloriser.colorise(data)
         elif switcher == 5:
             print(self.expenseController.getAverageDailySpend())
         elif switcher == 6:
@@ -58,6 +59,7 @@ class View:
     def app(self):
         print("Welcome to the expenses app")
         print("Today: " + str(date.today()))
+        self.coloriser.colorise(self.expenseController.getLastWeekExpenses())
         self.coloriser.colorise(self.expenseController.getYesterdayExpenses())
         self.coloriser.colorise(self.expenseController.getDailyExpenses())
         self.coloriser.colorise(self.expenseController.getWeeklyExpenses())
