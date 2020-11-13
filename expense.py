@@ -41,7 +41,7 @@ class ExpenseController:
                     days_of_the_week["Sunday"] += price
         print_array = []
         for day, expenses in days_of_the_week.items():
-            print_array.append([expenses, day + ": ", "£" + str(expenses / 100)]) 
+            print_array.append([expenses, day + ": £" + str(expenses / 100)]) 
         return print_array
 
     def getYesterdayExpenses(self):
