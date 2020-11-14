@@ -49,9 +49,9 @@ class ExpenseController:
         yesterday = date.today() - timedelta(days=1)
         total = 0
         for row in self.db.select():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
+            row_date = datetime.strptime(row[1], '%d, %m, %y').date()
             price = float('{0}'.format(row[0]))
-            if yesterday.day == date.day:
+            if yesterday == row_date:
                 total += price
         return (total, "£" + str(total / 100) + " spent yesterday")
 
@@ -59,9 +59,9 @@ class ExpenseController:
         today = time.localtime(time.time()).tm_mday
         total = 0
         for row in self.db.select():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
+            row_date = datetime.strptime(row[1], '%d, %m, %y').date()
             price = float('{0}'.format(row[0]))
-            if today == date.day:
+            if row_date == date.today():
                 total += price
         return (total, "£" + str(total / 100) + " spent today")
 
