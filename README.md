@@ -1,4 +1,4 @@
-LDovic hereby disclaims all copyright interest in the program “Numerology Calculator” (which does Numerology calculations) written by L Noble.
+LDovic hereby disclaims all copyright interest in the program “Expenses App" (which calculate expenses) written by L Noble.
 
 signature of L Noble 1 30 August 2020 L Noble
 
