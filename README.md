@@ -1,9 +1,11 @@
 LDovic hereby disclaims all copyright interest in the program “Expenses App" (which calculate expenses) written by L Noble.
 
-signature of L Noble 1 30 August 2020 L Noble
+signature of L Noble 1 14 November 2020 L Noble
 
 End license.
 
-Expenses App
+This expenses app can be used to track your expenses and save money! Input your daily expenses and keep an eye on your spending.
+
+Run it as a terminal based app in Python for your Ubuntu Touch.
 
 python3 main.py 👍
