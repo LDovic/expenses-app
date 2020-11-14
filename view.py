@@ -37,14 +37,13 @@ class View:
         string = "1. Daily\n2. Weekly\n3. Monthly\n4. Days of the week\n5. Average daily\n6. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
-            self.coloriser.colorise(self.expenseController.getDailyExpenses()) 
+            self.coloriser.coloriseExpense(self.expenseController.getDailyExpenses()) 
         elif switcher == 2:
             print(self.expenseController.getWeeklyExpenses()) 
         elif switcher == 3:
             print(self.expenseController.getMonthlyExpenses()) 
         elif switcher == 4:
-            for data in self.expenseController.getDaysOfTheWeekExpenses():
-                self.coloriser.colorise(data)
+            self.expenseController.getDaysOfTheWeekExpenses()
         elif switcher == 5:
             print(self.expenseController.getAverageDailySpend())
         elif switcher == 6:
@@ -56,14 +55,21 @@ class View:
         for purchase in self.expenseController.getPurchaseHistory():
             print(purchase)
 
+    def overview(self):
+        self.expenseController.getDaysOfTheWeekExpenses()
+        self.coloriser.coloriseExpense(self.expenseController.getLastWeekExpenses())
+        self.coloriser.coloriseExpense(self.expenseController.getYesterdayExpenses())
+        self.coloriser.coloriseExpense(self.expenseController.getDailyExpenses())
+        self.coloriser.coloriseExpense(self.expenseController.getWeeklyExpenses())
+        self.coloriser.coloriseExpense(self.expenseController.getMonthlyExpenses())        
+
+    def openingMessage(self):
+        self.coloriser.coloriseCommunication("Welcome to the expenses app")
+        self.coloriser.coloriseCommunication(str(date.today()))
+
     def app(self):
-        print("Welcome to the expenses app")
-        print("Today: " + str(date.today()))
-        self.coloriser.colorise(self.expenseController.getLastWeekExpenses())
-        self.coloriser.colorise(self.expenseController.getYesterdayExpenses())
-        self.coloriser.colorise(self.expenseController.getDailyExpenses())
-        self.coloriser.colorise(self.expenseController.getWeeklyExpenses())
-        self.coloriser.colorise(self.expenseController.getMonthlyExpenses())
+        self.openingMessage()
+        self.overview()
         string = "1. Insert expense\n2. Total expenses\n3. Purchase history\n4. Quit\n"
         switcher = self.switch(string)
         if switcher == 1:
@@ -74,4 +80,3 @@ class View:
             self.getPurchaseHistory()
         elif switcher == 4:
             return True
-

@@ -1,7 +1,10 @@
 from constants import *
 
 class Coloriser:
-    def colorise(self, value_text):
+    def coloriseCommunication(self, text):
+        print(bcolors.BLUE + text + bcolors.ENDC)
+
+    def coloriseExpense(self, value_text):
         value = value_text[0]
         text = value_text[1]
         if value > DAILY_UPPER_LIMIT:

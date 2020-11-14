@@ -17,32 +17,52 @@ class ExpenseController:
     def insertExpense(self, insert):
         self.db.insert(insert)
 
+    def expenseString(self, expense):
+        return "£" + str(expense / 100)
+
     def getDaysOfTheWeekExpenses(self):
-        days_of_the_week = {"Monday": 0, "Tuesday": 0, "Wednesday": 0, "Thursday": 0, "Friday": 0, "Saturday": 0, "Sunday": 0}
+        data = []
+        day_expense = ["Day", "Expense"]
+        days_of_the_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         this_week = datetime.today().date().isocalendar()[1]
+        Monday = 0
+        Tuesday = 0
+        Wednesday = 0
+        Thursday = 0
+        Friday = 0
+        Saturday = 0
+        Sunday = 0 
+
         for row in self.db.select_dotw():
             date = datetime.strptime(row[1], '%d, %m, %y').date()
             if this_week == date.isocalendar()[1]:
                 day = int(row[2])
                 price = float('{0}'.format(row[0]))
                 if day == 0:
-                    days_of_the_week["Monday"] += price
+                    Monday += price
                 if day == 1:
-                    days_of_the_week["Tuesday"] += price
+                    Tuesday += price
                 if day == 2:
-                    days_of_the_week["Wednesday"] += price 
+                    Wednesday += price 
                 if day == 3:
-                    days_of_the_week["Thursday"] += price
+                    Thursday += price
                 if day == 4:
-                    days_of_the_week["Friday"] += price
+                    Friday += price
                 if day == 5:
-                    days_of_the_week["Saturday"] += price
+                    Saturday += price
                 if day == 6:
-                    days_of_the_week["Sunday"] += price
-        print_array = []
-        for day, expenses in days_of_the_week.items():
-            print_array.append([expenses, day + ": £" + str(expenses / 100)]) 
-        return print_array
+                    Sunday += price
+
+        data.append(self.expenseString(Monday))
+        data.append(self.expenseString(Tuesday))        
+        data.append(self.expenseString(Wednesday))
+        data.append(self.expenseString(Thursday))
+        data.append(self.expenseString(Friday))
+        data.append(self.expenseString(Saturday))
+        data.append(self.expenseString(Sunday))
+
+        for day, row in zip(days_of_the_week, data):
+            print("{0:12}{1:}".format(day, row))
 
     def getYesterdayExpenses(self):
         from datetime import date
