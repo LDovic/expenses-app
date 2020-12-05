@@ -41,7 +41,7 @@ class View:
         elif switcher == 2:
             print(self.expenseController.getWeeklyExpenses()) 
         elif switcher == 3:
-            print(self.expenseController.getMonthlyExpenses()) 
+            print(self.expenseController.getMonthsOfTheYearExpenses()) 
         elif switcher == 4:
             self.expenseController.getDaysOfTheWeekExpenses()
         elif switcher == 5:
@@ -61,7 +61,6 @@ class View:
         self.coloriser.coloriseExpense(self.expenseController.getYesterdayExpenses())
         self.coloriser.coloriseExpense(self.expenseController.getDailyExpenses())
         self.coloriser.coloriseExpense(self.expenseController.getWeeklyExpenses())
-        self.coloriser.coloriseExpense(self.expenseController.getMonthlyExpenses())        
 
     def openingMessage(self):
         self.coloriser.coloriseCommunication("Welcome to the expenses app")

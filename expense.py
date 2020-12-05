@@ -108,15 +108,67 @@ class ExpenseController:
                 total += price
         return (total, "£" + str(total / 100) + " spent this week")
 
-    def getMonthlyExpenses(self):
-        this_month = datetime.today().date().month
-        total = 0
+    def getMonthsOfTheYearExpenses(self):
+        data = []
+        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+        January = 0
+        February = 0
+        March = 0
+        April = 0
+        May = 0
+        June = 0
+        July = 0
+        August = 0
+        September = 0
+        October = 0
+        November = 0
+        December = 0
+
         for row in self.db.select():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
+            month = datetime.strptime(row[1], '%d, %m, %y').date().month
             price = float('{0}'.format(row[0]))
-            if this_month == date.month:
-                total += price
-        return (total, "£" + str(total / 100) + " spent this month")
+            print(month)
+            if month == 1:
+                January += price
+            elif month == 2:
+                February += price 
+            elif month == 3:
+                March += price
+            elif month == 4:
+                April += price
+            elif month == 5:
+                May += price
+            elif month == 6:
+                June += price
+            elif month == 7:
+                July += price
+            elif month == 8:
+                August += price
+            elif month == 9:
+                September += price
+            elif month == 10:
+                October += price
+            elif month == 11:
+                November += price
+            elif month == 12:
+                December += price
+
+        data.append(self.expenseString(January))
+        data.append(self.expenseString(February))
+        data.append(self.expenseString(March))
+        data.append(self.expenseString(April))
+        data.append(self.expenseString(May))
+        data.append(self.expenseString(June))
+        data.append(self.expenseString(July))
+        data.append(self.expenseString(August))
+        data.append(self.expenseString(September))
+        data.append(self.expenseString(October))
+        data.append(self.expenseString(November))
+        data.append(self.expenseString(December))
+
+        for day, row in zip(months, data):
+            print("{0:12}{1:}".format(day, row))
 
     def getAverageDailySpend(self):
         this_week = datetime.today().date().isocalendar()[1]
