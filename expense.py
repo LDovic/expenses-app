@@ -98,6 +98,19 @@ class ExpenseController:
                 total += price
         return (total, "£" + str(total / 100) + " spent last week")
 
+    def getWeeksOfTheYearExpenses(self):
+        num = [i for i in range(53)]
+        data = [0] * 52
+        for row in self.db.select():
+            week = datetime.strptime(row[1], '%d, %m, %y').date().isocalendar()[1]
+            price = float('{0}'.format(row[0]))
+            for week_num in range(1, 52):
+                if week_num == week:
+                    data[week_num] += price
+        for week, row in zip(num, data):
+            price = self.expenseString(row)
+            print("{0:1}{1:}".format(week, price))
+
     def getWeeklyExpenses(self):
         this_week = datetime.today().date().isocalendar()[1]
         total = 0
@@ -128,7 +141,6 @@ class ExpenseController:
         for row in self.db.select():
             month = datetime.strptime(row[1], '%d, %m, %y').date().month
             price = float('{0}'.format(row[0]))
-            print(month)
             if month == 1:
                 January += price
             elif month == 2:
@@ -167,8 +179,8 @@ class ExpenseController:
         data.append(self.expenseString(November))
         data.append(self.expenseString(December))
 
-        for day, row in zip(months, data):
-            print("{0:12}{1:}".format(day, row))
+        for month, row in zip(months, data):
+            print("{0:12}{1:}".format(month, row))
 
     def getAverageDailySpend(self):
         this_week = datetime.today().date().isocalendar()[1]

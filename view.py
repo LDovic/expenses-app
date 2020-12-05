@@ -39,9 +39,9 @@ class View:
         if switcher == 1:
             self.coloriser.coloriseExpense(self.expenseController.getDailyExpenses()) 
         elif switcher == 2:
-            print(self.expenseController.getWeeklyExpenses()) 
+            self.expenseController.getWeeksOfTheYearExpenses() 
         elif switcher == 3:
-            print(self.expenseController.getMonthsOfTheYearExpenses()) 
+            self.expenseController.getMonthsOfTheYearExpenses() 
         elif switcher == 4:
             self.expenseController.getDaysOfTheWeekExpenses()
         elif switcher == 5:
