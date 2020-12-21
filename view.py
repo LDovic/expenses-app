@@ -31,7 +31,7 @@ class View:
             print('Incorrect datatype')
             return
         expense = Expense(value, name)
-        self.expenseController.insertExpense([(expense.value, expense.name, expense.date_entered, expense.day_of_the_week)])
+        self.expenseController.insertExpense([(expense.value, expense.name, expense.day, expense.month, expense.year, expense.week, expense.weekday)])
 
     def getPurchases(self):
         string = "1. Daily\n2. Weekly\n3. Monthly\n4. Days of the week\n5. Average daily\n6. Quit\n"

@@ -12,17 +12,25 @@ class Db:
         self.cursor = self.connection.cursor()
 
     def select(self):
-        self.cursor.execute("SELECT price, date_entered FROM expenses")
+        self.cursor.execute("SELECT price FROM expenses")
         return self.cursor.fetchall()
 
     def select_all(self):
         self.cursor.execute("SELECT * FROM expenses;")
         return self.cursor.fetchall()
 
-    def select_dotw(self):
-        self.cursor.execute("SELECT price, date_entered, day_of_the_week FROM expenses")
+    def select_day(self, day, year):
+        self.cursor.execute("SELECT price, day FROM expenses WHERE day = ? AND year = ?", (day, year))
+        return self.cursor.fetchall()        
+
+    def select_week(self, week, year):
+        self.cursor.execute("SELECT price, week, weekday FROM expenses WHERE week = ? AND year = ?", (week, year))
         return self.cursor.fetchall()
 
+    def select_month(self, year):
+        self.cursor.execute("SELECT price, month FROM expenses WHERE year = ?", (year,))
+        return self.cursor.fetchall()    
+
     def insert(self, insert):
-        self.cursor.executemany("INSERT INTO expenses VALUES (?, ?, ?, ?)", insert)
+        self.cursor.executemany("INSERT INTO expenses VALUES (?, ?, ?, ?, ?, ?, ?)", insert)
         self.connection.commit()

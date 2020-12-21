@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import sqlite3
 from database import *
 from sqlite3 import dbapi2
@@ -7,12 +8,18 @@ class Expense:
     def __init__(self, value, name):
         self.value = value
         self.name = name
-        self.date_entered = time.strftime("%d, %m, %y")
-        self.day_of_the_week = time.localtime(time.time()).tm_wday
+        self.day = time.strftime("%d")
+        self.month = time.strftime("%m")
+        self.year = time.strftime("%y")
+        self.week = datetime.today().date().isocalendar()[1]
+        self.weekday = time.localtime(time.time()).tm_wday
 
 class ExpenseController:
     def __init__(self):
         self.db = Db()
+        self.week = datetime.today().date().isocalendar()[1]
+        self.month = time.strftime("%m")
+        self.year = time.strftime("%y")
 
     def insertExpense(self, insert):
         self.db.insert(insert)
@@ -24,7 +31,6 @@ class ExpenseController:
         data = []
         day_expense = ["Day", "Expense"]
         days_of_the_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        this_week = datetime.today().date().isocalendar()[1]
         Monday = 0
         Tuesday = 0
         Wednesday = 0
@@ -33,25 +39,23 @@ class ExpenseController:
         Saturday = 0
         Sunday = 0 
 
-        for row in self.db.select_dotw():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
-            if this_week == date.isocalendar()[1]:
-                day = int(row[2])
-                price = float('{0}'.format(row[0]))
-                if day == 0:
-                    Monday += price
-                if day == 1:
-                    Tuesday += price
-                if day == 2:
-                    Wednesday += price 
-                if day == 3:
-                    Thursday += price
-                if day == 4:
-                    Friday += price
-                if day == 5:
-                    Saturday += price
-                if day == 6:
-                    Sunday += price
+        for row in self.db.select_week(self.week, self.year):
+            day = int(row[2])
+            price = float('{0}'.format(row[0]))
+            if day == 0:
+                Monday += price
+            if day == 1:
+                Tuesday += price
+            if day == 2:
+                Wednesday += price 
+            if day == 3:
+                Thursday += price
+            if day == 4:
+                Friday += price
+            if day == 5:
+                Saturday += price
+            if day == 6:
+                Sunday += price
 
         data.append(self.expenseString(Monday))
         data.append(self.expenseString(Tuesday))        
@@ -67,31 +71,30 @@ class ExpenseController:
     def getYesterdayExpenses(self):
         from datetime import date
         yesterday = date.today() - timedelta(days=1)
+        year = self.year
+        if (self.month == 1) and (yesterday == 31):
+            year = self.year - 1
         total = 0
-        for row in self.db.select():
-            row_date = datetime.strptime(row[1], '%d, %m, %y').date()
+        for row in self.db.select_day(yesterday, year):
             price = float('{0}'.format(row[0]))
-            if yesterday == row_date:
-                total += price
+            total += price
         return (total, "£" + str(total / 100) + " spent yesterday")
 
     def getDailyExpenses(self):
-        today = time.localtime(time.time()).tm_mday
         total = 0
-        for row in self.db.select():
-            row_date = datetime.strptime(row[1], '%d, %m, %y').date()
+        for row in self.db.select_day(time.strftime("%d"), self.year):
             price = float('{0}'.format(row[0]))
-            if row_date == date.today():
-                total += price
+            total += price
         return (total, "£" + str(total / 100) + " spent today")
 
     def getLastWeekExpenses(self):
-        this_week = datetime.today().date().isocalendar()[1]
-        last_week = this_week - 1
-        if this_week <= 1:
+        last_week = self.week - 1
+        year = self.year
+        if self.week <= 1:
             last_week = 52
+            year = self.year - 1
         total = 0
-        for row in self.db.select():
+        for row in self.db.select_week(last_week, year):
             date = datetime.strptime(row[1], '%d, %m, %y').date()
             price = float('{0}'.format(row[0]))
             if last_week == date.isocalendar()[1]:
@@ -99,26 +102,24 @@ class ExpenseController:
         return (total, "£" + str(total / 100) + " spent last week")
 
     def getWeeksOfTheYearExpenses(self):
-        num = [i for i in range(53)]
-        data = [0] * 52
-        for row in self.db.select():
-            week = datetime.strptime(row[1], '%d, %m, %y').date().isocalendar()[1]
+        num = [i for i in range(1, 53)]
+        data = [0] * 53
+        for row in self.db.select_week(self.week, self.year):
+            week = row[1]
             price = float('{0}'.format(row[0]))
-            for week_num in range(1, 52):
-                if week_num == week:
-                    data[week_num] += price
+            for week_num in num:
+                if week == week_num:
+                    print(week, price)
+                    data[week_num - 1] += price
         for week, row in zip(num, data):
             price = self.expenseString(row)
             print("{0:1}{1:}".format(week, price))
 
     def getWeeklyExpenses(self):
-        this_week = datetime.today().date().isocalendar()[1]
         total = 0
-        for row in self.db.select():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
+        for row in self.db.select_week(self.week, self.year):
             price = float('{0}'.format(row[0]))
-            if this_week == date.isocalendar()[1]:
-                total += price
+            total += price
         return (total, "£" + str(total / 100) + " spent this week")
 
     def getMonthsOfTheYearExpenses(self):
@@ -138,8 +139,8 @@ class ExpenseController:
         November = 0
         December = 0
 
-        for row in self.db.select():
-            month = datetime.strptime(row[1], '%d, %m, %y').date().month
+        for row in self.db.select_month(self.year):
+            month = row[1]
             price = float('{0}'.format(row[0]))
             if month == 1:
                 January += price
