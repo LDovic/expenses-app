@@ -27,6 +27,10 @@ class Db:
         self.cursor.execute("SELECT price, week, weekday FROM expenses WHERE week = ? AND year = ?", (week, year))
         return self.cursor.fetchall()
 
+    def select_weeks(self, year):
+        self.cursor.execute("SELECT price, week FROM expenses WHERE year = ?", (year,))
+        return self.cursor.fetchall()
+
     def select_month(self, year):
         self.cursor.execute("SELECT price, month FROM expenses WHERE year = ?", (year,))
         return self.cursor.fetchall()    

@@ -104,12 +104,11 @@ class ExpenseController:
     def getWeeksOfTheYearExpenses(self):
         num = [i for i in range(1, 53)]
         data = [0] * 53
-        for row in self.db.select_week(self.week, self.year):
+        for row in self.db.select_weeks(self.year):
             week = row[1]
             price = float('{0}'.format(row[0]))
             for week_num in num:
                 if week == week_num:
-                    print(week, price)
                     data[week_num - 1] += price
         for week, row in zip(num, data):
             price = self.expenseString(row)
