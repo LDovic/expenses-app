@@ -72,13 +72,11 @@ class ExpenseController:
     def getYesterdayExpenses(self):
         from datetime import date
         yesterday = date.today() - timedelta(days=1)
-        year = self.year
-        month = self.month
-        if (self.month == 1) and (yesterday == 31):
-            year = self.year - 1
-            month = 12
+        day = yesterday.strftime("%d")
+        month = yesterday.strftime("%m")
+        year = yesterday.strftime("%Y")
         total = 0
-        for row in self.db.select_day(yesterday, month, year):
+        for row in self.db.select_day(day, month, year):
             price = float('{0}'.format(row[0]))
             total += price
         return (total, "£" + str(total / 100) + " spent yesterday")
