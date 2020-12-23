@@ -72,7 +72,8 @@ class ExpenseController:
     def getYesterdayExpenses(self):
         from datetime import date
         yesterday = date.today() - timedelta(days=1)
-        year = self.year, month = self.month
+        year = self.year
+        month = self.month
         if (self.month == 1) and (yesterday == 31):
             year = self.year - 1
             month = 12
@@ -139,7 +140,7 @@ class ExpenseController:
         November = 0
         December = 0
 
-        for row in self.db.select_month(self.year):
+        for row in self.db.select_months(self.year):
             month = row[1]
             price = float('{0}'.format(row[0]))
             if month == 1:

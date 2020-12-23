@@ -11,14 +11,6 @@ class Db:
         self.connection = sqlite3.connect("expenses.db")
         self.cursor = self.connection.cursor()
 
-    def select(self):
-        self.cursor.execute("SELECT price FROM expenses")
-        return self.cursor.fetchall()
-
-    def select_all(self):
-        self.cursor.execute("SELECT * FROM expenses;")
-        return self.cursor.fetchall()
-
     def select_day(self, day, month, year):
         self.cursor.execute("SELECT price, day FROM expenses WHERE day = ? AND month = ? AND year = ?", (day, month, year))
         return self.cursor.fetchall()        
@@ -31,7 +23,7 @@ class Db:
         self.cursor.execute("SELECT price, week FROM expenses WHERE year = ?", (year,))
         return self.cursor.fetchall()
 
-    def select_month(self, year):
+    def select_months(self, year):
         self.cursor.execute("SELECT price, month FROM expenses WHERE year = ?", (year,))
         return self.cursor.fetchall()    
 
