@@ -10,7 +10,7 @@ class Expense:
         self.name = name
         self.day = time.strftime("%d")
         self.month = time.strftime("%m")
-        self.year = time.strftime("%y")
+        self.year = time.strftime("%Y")
         self.week = datetime.today().date().isocalendar()[1]
         self.weekday = time.localtime(time.time()).tm_wday
 
@@ -19,7 +19,7 @@ class ExpenseController:
         self.db = Db()
         self.week = datetime.today().date().isocalendar()[1]
         self.month = time.strftime("%m")
-        self.year = time.strftime("%y")
+        self.year = time.strftime("%Y")
 
     def insertExpense(self, insert):
         self.db.insert(insert)
@@ -95,9 +95,8 @@ class ExpenseController:
             year = self.year - 1
         total = 0
         for row in self.db.select_week(last_week, year):
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
             price = float('{0}'.format(row[0]))
-            if last_week == date.isocalendar()[1]:
+            if last_week == row[1]:
                 total += price
         return (total, "£" + str(total / 100) + " spent last week")
 
@@ -183,12 +182,10 @@ class ExpenseController:
             print("{0:12}{1:}".format(month, row))
 
     def getAverageDailySpend(self):
-        this_week = datetime.today().date().isocalendar()[1]
         total = 0
-        for row in self.db.select():
-            date = datetime.strptime(row[1], '%d, %m, %y').date()
+        for row in self.db.select_week():
             price = float('{0}'.format(row[0]))
-            if this_week == date.isocalendar()[1]:
+            if self.week == row[1]:
                 total += price
         return (total, "£" + str(total / 7 / 100) + " average daily spend")
 
