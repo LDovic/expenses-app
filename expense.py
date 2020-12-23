@@ -17,6 +17,7 @@ class Expense:
 class ExpenseController:
     def __init__(self):
         self.db = Db()
+        self.day = time.strftime("%d")
         self.week = datetime.today().date().isocalendar()[1]
         self.month = time.strftime("%m")
         self.year = time.strftime("%Y")
@@ -71,18 +72,19 @@ class ExpenseController:
     def getYesterdayExpenses(self):
         from datetime import date
         yesterday = date.today() - timedelta(days=1)
-        year = self.year
+        year = self.year, month = self.month
         if (self.month == 1) and (yesterday == 31):
             year = self.year - 1
+            month = 12
         total = 0
-        for row in self.db.select_day(yesterday, year):
+        for row in self.db.select_day(yesterday, month, year):
             price = float('{0}'.format(row[0]))
             total += price
         return (total, "£" + str(total / 100) + " spent yesterday")
 
     def getDailyExpenses(self):
         total = 0
-        for row in self.db.select_day(time.strftime("%d"), self.year):
+        for row in self.db.select_day(self.day, self.month, self.year):
             price = float('{0}'.format(row[0]))
             total += price
         return (total, "£" + str(total / 100) + " spent today")

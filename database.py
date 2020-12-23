@@ -19,8 +19,8 @@ class Db:
         self.cursor.execute("SELECT * FROM expenses;")
         return self.cursor.fetchall()
 
-    def select_day(self, day, year):
-        self.cursor.execute("SELECT price, day FROM expenses WHERE day = ? AND year = ?", (day, year))
+    def select_day(self, day, month, year):
+        self.cursor.execute("SELECT price, day FROM expenses WHERE day = ? AND month = ? AND year = ?", (day, month, year))
         return self.cursor.fetchall()        
 
     def select_week(self, week, year):
