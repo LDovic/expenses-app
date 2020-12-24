@@ -52,8 +52,7 @@ class View:
             switcher = switch(string)
 
     def getPurchaseHistory(self):
-        for purchase in self.expenseController.getPurchaseHistory():
-            print(purchase)
+        self.expenseController.getPurchaseHistoryWeek()
 
     def overview(self):
         self.expenseController.getDaysOfTheWeekExpenses()

@@ -11,6 +11,10 @@ class Db:
         self.connection = sqlite3.connect("expenses.db")
         self.cursor = self.connection.cursor()
 
+    def select_expenses_week(self, week, year):
+        self.cursor.execute("SELECT price, expense, day, month, year, weekday FROM expenses WHERE week = ? AND year = ?", (week, year))
+        return self.cursor.fetchall()
+
     def select_day(self, day, month, year):
         self.cursor.execute("SELECT price, day FROM expenses WHERE day = ? AND month = ? AND year = ?", (day, month, year))
         return self.cursor.fetchall()        

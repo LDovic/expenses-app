@@ -2,6 +2,7 @@ import time
 from datetime import datetime
 import sqlite3
 from database import *
+from controller import Formatter
 from sqlite3 import dbapi2
 
 class Expense:
@@ -25,10 +26,8 @@ class ExpenseController:
     def insertExpense(self, insert):
         self.db.insert(insert)
 
-    def expenseString(self, expense):
-        return "£" + str(expense / 100)
-
     def getDaysOfTheWeekExpenses(self):
+        formatter = Formatter()
         data = []
         day_expense = ["Day", "Expense"]
         days_of_the_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -58,16 +57,16 @@ class ExpenseController:
             if day == 6:
                 Sunday += price
 
-        data.append(self.expenseString(Monday))
-        data.append(self.expenseString(Tuesday))        
-        data.append(self.expenseString(Wednesday))
-        data.append(self.expenseString(Thursday))
-        data.append(self.expenseString(Friday))
-        data.append(self.expenseString(Saturday))
-        data.append(self.expenseString(Sunday))
+        data.append(Monday)
+        data.append(Tuesday)        
+        data.append(Wednesday)
+        data.append(Thursday)
+        data.append(Friday)
+        data.append(Saturday)
+        data.append(Sunday)
 
-        for day, row in zip(days_of_the_week, data):
-            print("{0:12}{1:}".format(day, row))
+        zipped = list(zip(days_of_the_week, map(formatter.pricify, data)))
+        Formatter().formatTwo(zipped)
 
     def getYesterdayExpenses(self):
         from datetime import date
@@ -102,6 +101,7 @@ class ExpenseController:
         return (total, "£" + str(total / 100) + " spent last week")
 
     def getWeeksOfTheYearExpenses(self):
+        formatter = Formatter()
         num = [i for i in range(1, 53)]
         data = [0] * 53
         for row in self.db.select_weeks(self.year):
@@ -110,9 +110,8 @@ class ExpenseController:
             for week_num in num:
                 if week == week_num:
                     data[week_num - 1] += price
-        for week, row in zip(num, data):
-            price = self.expenseString(row)
-            print("{0:1}{1:}".format(week, price))
+        zipped = list(zip(num, map(formatter.pricify, data)))
+        Formatter().formatTwo(zipped)
 
     def getWeeklyExpenses(self):
         total = 0
@@ -122,6 +121,7 @@ class ExpenseController:
         return (total, "£" + str(total / 100) + " spent this week")
 
     def getMonthsOfTheYearExpenses(self):
+        formatter = Formatter()
         data = []
         months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
@@ -166,21 +166,21 @@ class ExpenseController:
             elif month == 12:
                 December += price
 
-        data.append(self.expenseString(January))
-        data.append(self.expenseString(February))
-        data.append(self.expenseString(March))
-        data.append(self.expenseString(April))
-        data.append(self.expenseString(May))
-        data.append(self.expenseString(June))
-        data.append(self.expenseString(July))
-        data.append(self.expenseString(August))
-        data.append(self.expenseString(September))
-        data.append(self.expenseString(October))
-        data.append(self.expenseString(November))
-        data.append(self.expenseString(December))
+        data.append(January)
+        data.append(February)
+        data.append(March)
+        data.append(April)
+        data.append(May)
+        data.append(June)
+        data.append(July)
+        data.append(August)
+        data.append(September)
+        data.append(October)
+        data.append(November)
+        data.append(December)
 
-        for month, row in zip(months, data):
-            print("{0:12}{1:}".format(month, row))
+        zipped = list(zip(months, map(formatter.pricify, data)))
+        Formatter().formatTwo(zipped)
 
     def getAverageDailySpend(self):
         total = 0
@@ -190,5 +190,16 @@ class ExpenseController:
                 total += price
         return (total, "£" + str(total / 7 / 100) + " average daily spend")
 
-    def getPurchaseHistory(self):
-        return self.db.select_all()
+    def getPurchaseHistoryWeek(self):
+        data = []
+        headings = ['Price', 'Expense', 'Date', 'Day']
+        data.append(headings)
+        for element in self.db.select_expenses_week(self.week, self.year):
+            collect = []
+            date = "-".join(list(map(str, element[2:5])))
+            collect.append("£" + str(element[0] / 100))
+            collect.append(element[1])
+            collect.append(date)
+            collect.append(element[5])
+            data.append(collect)
+        Formatter().formatFour(data)
