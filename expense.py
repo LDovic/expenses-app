@@ -180,7 +180,7 @@ class ExpenseController:
         data.append(December)
 
         zipped = list(zip(months, map(formatter.pricify, data)))
-        Formatter().formatTwo(zipped)
+        formatter.formatTwo(zipped)
 
     def getAverageDailySpend(self):
         total = 0
