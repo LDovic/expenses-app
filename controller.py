@@ -5,13 +5,13 @@ class Formatter:
        return "£" + str(int(price) / 100)
 
     def formatTwo(self, data):
-        output = "{0:<10}{1:>8}" 
+        output = "{: <20}{: <20}" 
         for datum in data:
             datum = list(map(str, datum))
             print(output.format(datum[0], datum[1]))
 
     def formatFour(self, data):
-        output = "{0:<10}{1:>10}{2:>10}{3:>10}"
+        output = "{: <20}{: <20}{: <20}{: <20}"
         for datum in data:
             datum = list(map(str, datum))
             print(output.format(datum[0], datum[1], datum[2], datum[3]))
