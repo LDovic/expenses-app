@@ -66,7 +66,7 @@ class ExpenseController:
         data.append(Sunday)
 
         zipped = list(zip(days_of_the_week, map(formatter.pricify, data)))
-        Formatter().formatTwo(zipped)
+        formatter.formatTwo(zipped)
 
     def getYesterdayExpenses(self):
         from datetime import date
