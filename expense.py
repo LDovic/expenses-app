@@ -26,6 +26,11 @@ class ExpenseController:
     def insertExpense(self, insert):
         self.db.insert(insert)
 
+    def deleteExpense(self, id):
+        if not self.db.select(id):
+            print("Invalid id")
+        self.db.delete(id)
+
     def getDaysOfTheWeekExpenses(self):
         formatter = Formatter()
         data = []
@@ -192,14 +197,15 @@ class ExpenseController:
 
     def getPurchaseHistoryWeek(self):
         data = []
-        headings = ['Price', 'Expense', 'Date', 'Day']
+        headings = ['id', 'Price', 'Expense', 'Date', 'Day']
         data.append(headings)
         for element in self.db.select_expenses_week(self.week, self.year):
             collect = []
-            date = "-".join(list(map(str, element[2:5])))
-            collect.append("£" + str(element[0] / 100))
-            collect.append(element[1])
+            date = "-".join(list(map(str, element[3:6])))
+            collect.append(element[0])
+            collect.append("£" + str(element[1] / 100))
+            collect.append(element[2])
             collect.append(date)
-            collect.append(element[5])
+            collect.append(element[6])
             data.append(collect)
         Formatter().formatFour(data)

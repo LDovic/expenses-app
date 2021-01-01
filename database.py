@@ -11,8 +11,20 @@ class Db:
         self.connection = sqlite3.connect("expenses.db")
         self.cursor = self.connection.cursor()
 
+    def insert(self, insert):
+        self.cursor.executemany("INSERT INTO expenses VALUES (?, ?, ?, ?, ?, ?, ?)", insert)
+        self.connection.commit()
+
+    def delete(self, id):
+        self.cursor.execute("DELETE FROM expenses WHERE rowid = ?", (id,))
+        self.connection.commit()
+
+    def select(self, id):
+        self.cursor.execute("SELECT rowid FROM expenses WHERE rowid = ?", (id,))
+        return self.cursor.fetchall()
+
     def select_expenses_week(self, week, year):
-        self.cursor.execute("SELECT price, expense, day, month, year, weekday FROM expenses WHERE week = ? AND year = ?", (week, year))
+        self.cursor.execute("SELECT rowid, price, expense, day, month, year, weekday FROM expenses WHERE week = ? AND year = ?", (week, year))
         return self.cursor.fetchall()
 
     def select_day(self, day, month, year):
@@ -30,7 +42,3 @@ class Db:
     def select_months(self, year):
         self.cursor.execute("SELECT price, month FROM expenses WHERE year = ?", (year,))
         return self.cursor.fetchall()    
-
-    def insert(self, insert):
-        self.cursor.executemany("INSERT INTO expenses VALUES (?, ?, ?, ?, ?, ?, ?)", insert)
-        self.connection.commit()

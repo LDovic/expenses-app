@@ -49,10 +49,26 @@ class View:
         elif switcher == 6:
             return False
         else:
-            switcher = switch(string)
+            switcher = self.switch(string)
+
+    def deleteExpense(self):
+        string = "Enter expense id to delete\n"
+        switcher = self.switch(string)
+        if isinstance(switcher, int):
+            self.expenseController.deleteExpense(switcher)
+        else:
+            return False
 
     def getPurchaseHistory(self):
+        string = "1. Delete expense\n2. Quit\n"
         self.expenseController.getPurchaseHistoryWeek()
+        switcher = self.switch(string)
+        if switcher == 1:
+            self.deleteExpense()
+        elif switcher == 2:
+            return False
+        else:
+            switcher = self.switch(string)
 
     def overview(self):
         self.expenseController.getDaysOfTheWeekExpenses()

@@ -11,10 +11,10 @@ class Formatter:
             print(output.format(datum[0], datum[1]))
 
     def formatFour(self, data):
-        output = "{: <20}{: <20}{: <20}{: <20}"
+        output = "{: <20}{: <20}{: <20}{: <20}{: <20}"
         for datum in data:
             datum = list(map(str, datum))
-            print(output.format(datum[0], datum[1], datum[2], datum[3]))
+            print(output.format(datum[0], datum[1], datum[2], datum[3], datum[4]))
 
 class Coloriser:
     def coloriseCommunication(self, text):
