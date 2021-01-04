@@ -21,7 +21,7 @@ class ExpenseController:
         self.day = time.strftime("%d")
         self.week = datetime.today().date().isocalendar()[1]
         self.month = time.strftime("%m")
-        self.year = time.strftime("%Y")
+        self.year = int(time.strftime("%Y"))
 
     def insertExpense(self, insert):
         self.db.insert(insert)
@@ -34,7 +34,6 @@ class ExpenseController:
     def getDaysOfTheWeekExpenses(self):
         formatter = Formatter()
         data = []
-        day_expense = ["Day", "Expense"]
         days_of_the_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         Monday = 0
         Tuesday = 0
